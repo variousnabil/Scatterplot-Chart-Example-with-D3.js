@@ -1,5 +1,5 @@
-const height = 700;
-const width = 800;
+const height = 620;
+const width = 700;
 const padding = 20;
 const url = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json';
 
@@ -32,6 +32,14 @@ const container = d3.select('body')
         .attr('width', width)
         .attr('height', height);
 
+    const title = svg.append('text')
+        .attr('id', 'title')
+        .attr('x', '360px')
+        .attr('y', 30)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '30px')
+        .text('Doping in Professional Bicycle Racing');
+
     let yearData = dataset.map(d => new Date(String(d.Year)));
     let timeData = dataset.map(d => d3.timeParse("%M:%S")(d.Time));
     let yearAndTime = dataset.map((d, i) => [d.Year, d.Time]);
@@ -45,7 +53,7 @@ const container = d3.select('body')
     const timeDomain = [d3.timeParse("%M:%S")("40:10"), d3.timeParse("%M:%S")("36:50")];
     console.log("time domain:", timeDomain);
     const yearRange = [padding, width - padding];
-    const timeRange = [height - padding, padding];
+    const timeRange = [height - padding, padding + 30];
     const xScale = d3.scaleTime().domain(yearDomain).range(yearRange);
     const yScale = d3.scaleTime().domain(timeDomain).range(timeRange);
 
@@ -55,7 +63,7 @@ const container = d3.select('body')
     svg.append('g').attr('transform', `translate(${padding * 2}, 0)`).call(yAxis);
 
     const circle = svg.selectAll('circle')
-        .data(yearAndTime)
+        .data(dataset)
         .enter()
         .append('circle')
         .attr('cx', (d, i) => xScale(yearData[i]))
@@ -63,12 +71,13 @@ const container = d3.select('body')
         .attr('r', 6)
         .style('opacity', '0.5')
         .style('fill', (d, i) => {
-            if (dataset[i].Doping === '') {
+            if (d.Doping === '') {
                 return 'navy';
             } else {
                 return 'red';
             }
         })
+        .attr('stroke', 'black')
         .append('title')
         .text(d => d)
 

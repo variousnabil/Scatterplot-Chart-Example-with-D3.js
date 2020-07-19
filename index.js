@@ -32,19 +32,8 @@ const container = d3.select('body')
         .attr('width', width)
         .attr('height', height);
 
-    const title = svg.append('text')
-        .attr('id', 'title')
-        .attr('x', `${(width / 2) + 30}px`)
-        .attr('y', 30)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '30px')
-        .text('Doping in Professional Bicycle Racing');
-
     let yearData = dataset.map(d => new Date(String(d.Year)));
     let timeData = dataset.map(d => d3.timeParse("%M:%S")(d.Time));
-
-    console.log(yearData);
-    console.log(timeData);
 
     const yearDomain = [new Date("1992"), new Date("2016")];
     console.log("year domain:", yearDomain);
@@ -88,15 +77,26 @@ const container = d3.select('body')
         .append('title')
         .text(d => d)
 
+    svg.append('text')
+        .attr('id', 'title')
+        .attr('x', `${(width / 2) + 30}px`)
+        .attr('y', 30)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '30px')
+        .text('Doping in Professional Bicycle Racing');
+
+    const description = svg.append('g')
+        .attr('id', 'legend');
+
+    // description 1
+    description.append('rect')
+        .style('fill', 'orange')
+        .attr('height', 16)
+        .attr('width', 16)
+        .attr('stroke', 'black')
+        .attr('transform', `translate(${width - padding * 2}, ${height - padding * 20})`);
+    description.append('text')
+        .text('Riders with doping allegations')
+        .attr('transform', `translate(${width - padding * 12}, ${height - (padding * 20 - 12)})`)
+
 })();
-
-const description = svg.append('g')
-    .attr('id', 'legend')
-    .attr('stroke', 'red')
-    .attr('x', '100')
-    .attr('y', '100');
-
-const desc1 = description.append('rect')
-    .fill('oange')
-    .attr('height', 10)
-    .attr('width', 10)

@@ -23,6 +23,7 @@ const container = d3.select('body')
 
 // self invoking 
 (async () => {
+
     const dataset = await fetch(url).then(res => res.json());
     console.log(dataset);
 
@@ -31,28 +32,27 @@ const container = d3.select('body')
         .attr('width', width)
         .attr('height', height);
 
-    let yearData = dataset.map(d => d.Year);
-    let timeData = dataset.map(d => d3.timeParse("%M:%S")(d.Time));
+    let yearData = dataset.map(d => new Date(String(d.Year)));
+    let timeData = dataset.map(d => d.Time);
 
-    console.log(yearData)
-    console.log(timeData)
+    console.log(yearData);
+    console.log(timeData);
 
-    const yearDomain = d3.extent(dataset, d => d.Year);
+    const yearDomain = d3.extent(yearData);
     console.log("year domain:", yearDomain);
-    const timeDomain = d3.extent(dataset, d => d3.timeParse("%M:%S")(d.Time));
+    const timeDomain = d3.extent(timeData);
     console.log("time domain:", timeDomain);
     const yearRange = [padding, width - padding];
     const timeRange = [height - padding, padding];
-    const xScale = d3.scaleLinear().domain(yearDomain).range(yearRange);
+    const xScale = d3.scaleTime().domain(yearDomain).range(yearRange);
     const yScale = d3.scaleTime().domain(timeDomain).range(timeRange);
 
-    console.log(xScale(1994));
-    console.log(yScale('36:50'));
-    console.log(d3.timeParse("%M:%S")(dataset[0].Time));
+    console.log(new Date('1992'));
 
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale);
     svg.append('g').attr('transform', `translate(0, ${height - padding * 2})`).call(xAxis);
     svg.append('g').attr('transform', `translate(${padding * 2}, 0)`).call(yAxis);
+
 })();
 

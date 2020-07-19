@@ -94,9 +94,24 @@ const container = d3.select('body')
         .attr('height', 16)
         .attr('width', 16)
         .attr('stroke', 'black')
+        .style('opacity', '0.7')
         .attr('transform', `translate(${width - padding * 2}, ${height - padding * 20})`);
     description.append('text')
         .text('Riders with doping allegations')
-        .attr('transform', `translate(${width - padding * 12}, ${height - (padding * 20 - 12)})`)
+        .style('font-size', 14)
+        .attr('transform', `translate(${width - padding * 11}, ${height - (padding * 20 - 12)})`)
 
+
+    //description 2
+    description.append('rect')
+        .style('fill', 'navy')
+        .attr('height', 16)
+        .attr('width', 16)
+        .attr('stroke', 'black')
+        .style('opacity', '0.7')
+        .attr('transform', `translate(${width - padding * 2}, ${height - padding * 19})`);
+    description.append('text')
+        .text('No doping allegations')
+        .style('font-size', 14)
+        .attr('transform', `translate(${width - padding * 8.6}, ${height - (padding * 19 - 12)})`)
 })();

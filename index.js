@@ -55,7 +55,7 @@ const container = d3.select('body')
         .attr('id', 'y-axis')
         .call(yAxis);
 
-    const circle = svg.selectAll('circle')
+    svg.selectAll('circle')
         .data(dataset)
         .enter()
         .append('circle')
@@ -133,15 +133,16 @@ const container = d3.select('body')
                 <br><br>
                 ${doping}`;
             }
-
+            tooltip.setAttribute('data-year', e.target.attributes['data-xvalue'].value);
             tooltip.style.opacity = 0.6;
             tooltip.style.left = (e.pageX + 20) + 'px';
             tooltip.style.top = (e.pageY - 30) + 'px';
-            console.log(item.Name, item.Nationality, item.Year, item.Time, item.Doping);
         });
         document.querySelector('.dot' + i).addEventListener('mouseleave', e => {
             const tooltip = document.querySelector('#tooltip');
             tooltip.style.opacity = 0;
+            tooltip.style.left = '0px';
+            tooltip.style.top = '0px';
         });
     });
 })();

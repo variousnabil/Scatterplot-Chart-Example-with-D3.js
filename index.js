@@ -62,7 +62,7 @@ const container = d3.select('body')
         .attr('cx', (d, i) => xScale(yearData[i]))
         .attr('cy', (d, i) => yScale(timeData[i]))
         .attr('r', 6)
-        .attr('class', 'dot')
+        .attr('class', (d, i) => 'dot dot' + i)
         .attr('data-xvalue', d => d.Year)
         .attr('data-yvalue', (d, i) => timeData[i])
         .style('opacity', '0.7')
@@ -74,8 +74,6 @@ const container = d3.select('body')
             }
         })
         .attr('stroke', 'black')
-        .append('title')
-        .text(d => d)
 
     svg.append('text')
         .attr('id', 'title')
@@ -99,7 +97,7 @@ const container = d3.select('body')
     description.append('text')
         .text('Riders with doping allegations')
         .style('font-size', 14)
-        .attr('transform', `translate(${width - padding * 11}, ${height - (padding * 20 - 12)})`)
+        .attr('transform', `translate(${width - padding * 11}, ${height - (padding * 20 - 12)})`);
 
 
     //description 2
@@ -113,5 +111,37 @@ const container = d3.select('body')
     description.append('text')
         .text('No doping allegations')
         .style('font-size', 14)
-        .attr('transform', `translate(${width - padding * 8.6}, ${height - (padding * 19 - 12)})`)
+        .attr('transform', `translate(${width - padding * 8.6}, ${height - (padding * 19 - 12)})`);
+
+    // tooltip
+    dataset.forEach((item, i) => {
+        document.querySelector('.dot' + i).addEventListener('mouseover', e => {
+            const name = item.Name;
+            const nationality = item.Nationality;
+            const year = item.Year;
+            const time = item.Time;
+            const doping = item.Doping;
+            const tooltip = document.querySelector('#tooltip');
+            if (doping === '') {
+                tooltip.innerHTML = `${name}, ${nationality}
+                <br>
+                Year: ${year}, Time: ${time}`;
+            } else {
+                tooltip.innerHTML = `${name}, ${nationality}
+                <br>
+                Year: ${year}, Time: ${time}
+                <br><br>
+                ${doping}`;
+            }
+
+            tooltip.style.opacity = 0.6;
+            tooltip.style.left = (e.pageX + 20) + 'px';
+            tooltip.style.top = (e.pageY - 30) + 'px';
+            console.log(item.Name, item.Nationality, item.Year, item.Time, item.Doping);
+        });
+        document.querySelector('.dot' + i).addEventListener('mouseleave', e => {
+            const tooltip = document.querySelector('#tooltip');
+            tooltip.style.opacity = 0;
+        });
+    });
 })();

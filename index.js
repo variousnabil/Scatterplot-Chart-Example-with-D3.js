@@ -1,5 +1,5 @@
-const height = 720;
-const width = 850;
+const height = 620;
+const width = 750;
 const padding = 20;
 const url = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json';
 
@@ -7,8 +7,8 @@ const body = d3.select('body')
     .style('display', 'flex')
     .style('align-items', 'center')
     .style('justify-content', 'center')
-    .style('height', '100vh')
-    .style('width', '100vw');
+    .style('height', '100%')
+    .style('width', '100%');
 
 const container = d3.select('body')
     .append('div')
@@ -16,7 +16,7 @@ const container = d3.select('body')
     .style('height', height + (padding * 2) + 'px')
     .style('width', width + (padding * 2) + 'px')
     .style('border', '1px solid black')
-    .style('margin', 'auto auto')
+    .style('margin', '20px 10px')
     .style('display', 'flex')
     .style('align-items', 'center')
     .style('justify-content', 'center');
@@ -33,11 +33,15 @@ const container = d3.select('body')
         .attr('height', height);
 
     let yearData = dataset.map(d => new Date(String(d.Year)));
-    let timeData = dataset.map(d => d3.timeParse("%M:%S")(d.Time));
+    let timeData = dataset.map(d => {
+        let time = d.Time.split(':');
+        return new Date(`2020-01-01T00:${time[0]}:${time[1]}`)
+    });
 
     const yearDomain = [new Date("1992"), new Date("2016")];
     console.log("year domain:", yearDomain);
-    const timeDomain = [d3.timeParse("%M:%S")("40:10"), d3.timeParse("%M:%S")("36:50")];
+    // const timeDomain = [d3.timeParse("%M:%S")("40:00"), d3.timeParse("%M:%S")("36:50")];
+    const timeDomain = [d3.max(timeData), d3.min(timeData)];
     console.log("time domain:", timeDomain);
     const yearRange = [padding, width - padding];
     const timeRange = [height - padding, padding + 30];
@@ -60,7 +64,7 @@ const container = d3.select('body')
         .enter()
         .append('circle')
         .attr('cx', (d, i) => xScale(yearData[i]))
-        .attr('cy', (d, i) => yScale(timeData[i]))
+        .attr('cy', (d, i) => yScale(timeData[i]) + 0.5)
         .attr('r', 6)
         .attr('class', (d, i) => 'dot dot' + i)
         .attr('data-xvalue', d => d.Year)
@@ -80,7 +84,7 @@ const container = d3.select('body')
         .attr('x', `${(width / 2) + 30}px`)
         .attr('y', 30)
         .attr('text-anchor', 'middle')
-        .style('font-size', '30px')
+        .style('font-size', '26px')
         .text('Doping in Professional Bicycle Racing');
 
     const description = svg.append('g')
